@@ -19,12 +19,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::get('/products', [ProductController::class, 'index'])->name('productsIndex');
-
-
     Route::get('/cart', [CartController::class, 'index'])->name('cartIndex');
-    Route::post('/cart/store/{product}', [CartController::class, 'store'])->name('storeCart');
-    Route::patch('/cart/update/{cartItem}', [CartController::class, 'update'])->name('updateCart');
-    Route::delete('/cart/remove/{cartItem}', [CartController::class, 'remove'])->name('removeCart');
+
+    Route::post('/cart/{product}', [CartController::class, 'store'])->name('storeCart');
+    Route::put('/cart/{cartItem}', [CartController::class, 'update'])->name('updateCart');
+    Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('destroyCart');
 });
 
 require __DIR__.'/settings.php';

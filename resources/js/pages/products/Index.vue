@@ -25,7 +25,7 @@ const props = defineProps<{
 }>();
 
 const isProductInCart = (productId: number) => {
-return props.cartProducts.includes(productId);
+    return props.cartProducts.includes(productId);
 };
 </script>
 

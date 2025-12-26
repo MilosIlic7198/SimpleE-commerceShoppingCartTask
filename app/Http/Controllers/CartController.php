@@ -12,9 +12,14 @@ class CartController extends Controller
 {
     public function index()
     {
-        $cartItems = Auth::user()->cartItems()->with('product')->get();
-
-        return Inertia::render('Cart/Index', [
+        // Fetch the cart products that the user already has in their cart
+        $cartItems = Auth::user()
+            ->cartItems()
+            ->select('id', 'product_id', 'quantity')
+            ->with('product')
+            ->get();
+        // Pass cart products to the frontend
+        return Inertia::render('cart/Index', [
             'cartItems' => $cartItems,
         ]);
     }
@@ -27,8 +32,8 @@ class CartController extends Controller
             ->first();
 
         if ($existingCartItem) {
-            // If the product already exists in the cart, simply return a response or message
-            return back()->with('info', 'Product is already in your cart');
+            // If the product already exists in the cart, simply return
+            return;
         }
 
         // If not in cart, create a new cart item
@@ -37,8 +42,6 @@ class CartController extends Controller
             'product_id' => $product->id,
             'quantity' => 1,  // Add 1 quantity by default
         ]);
-
-        return back()->with('success', 'Product was added in your cart');
     }
 
 
@@ -47,19 +50,16 @@ class CartController extends Controller
         $request->validate(['quantity' => 'required|integer|min:1']);
 
         if ($cartItem->product->stock_quantity < $request->quantity) {
-            return back()->withErrors(['stock' => 'Not enough stock']);
+            // No more in stock
+            return;
         }
 
         $cartItem->update(['quantity' => $request->quantity]);
-
-        return back();
     }
 
-    public function remove(CartItem $cartItem)
+    public function destroy(CartItem $cartItem)
     {
         $cartItem->delete();
-
-        return back();
     }
 
 }
