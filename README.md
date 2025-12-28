@@ -50,16 +50,6 @@ You can copy from the `.env.example` file using:
 cp .env.example .env
 ```
 
-### Also in `config/mail.php`
-
-Change this:
-
-`'default' => env('MAIL_MAILER', 'log'),`
-
-to this:
-
-`'default' => env('MAIL_MAILER', 'smtp'),`
-
 ### Installation Steps
 
 1. **Install PHP dependencies:**
